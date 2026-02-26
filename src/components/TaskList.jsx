@@ -84,6 +84,23 @@ function TaskList() {
     });
   };
 
+  // Different Tab Messages If Empty Sila
+  const getEmptyStateMessage = () => {
+    if (filter === "completed") {
+      return "No completed tasks yet 🎯 Complete a task and it will appear here.";
+    }
+    if (filter === "pending") {
+      return "You're all caught up! 🚀 No pending tasks.";
+    }
+    if (filter === "overdue") {
+      return "No overdue tasks 🎉 Great job staying on track!";
+    }
+    if (filter === "recentlyDeleted") {
+      return "Nothing in trash 🗑️ Deleted tasks will appear here.";
+    }
+    return "Nothing here yet 👀 Add a task to get started.";
+  };
+
   return (
     <div style={styles.container}>
       <h3 style={styles.title}>Task List</h3>
@@ -136,6 +153,13 @@ function TaskList() {
           ))}
         </select>
       </div>
+
+      {/* If Empty Sila */}
+      {filteredTasks.length === 0 && (
+        <div style={styles.emptyState}>
+          {getEmptyStateMessage()}
+        </div>
+      )}
 
       {filteredTasks.map((task) => {
         const categoryStyle = CATEGORY_STYLES.find(
@@ -394,6 +418,18 @@ const styles = {
     minHeight: "100vh",
     color: "#f1f5f9",
   },
+
+  // Empty State Style Design UI
+  emptyState: {
+    marginTop: "40px",
+    padding: "20px",
+    textAlign: "center",
+    backgroundColor: "#1e293b",
+    borderRadius: "12px",
+    border: "1px dashed #334155",
+    color: "#94a3b8",
+  },
+
   title: { marginBottom: "15px" },
   search: {
     padding: "8px",
@@ -425,7 +461,10 @@ const styles = {
     borderBottom: "2px solid #6366f1",
   },
   secondaryFilter: {
-    marginBottom: "20px",
+    marginBottom: "30px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
   },
   dropdownLabel: {
     fontSize: "13px",
