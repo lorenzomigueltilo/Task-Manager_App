@@ -19,20 +19,15 @@ function TaskList() {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [editTask, setEditTask] = useState(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState("all");
-  const [confirmDeleteId, setConfirmDeleteId] =
-    useState(null);
-  const [confirmPermanentDeleteId, setConfirmPermanentDeleteId] =
-    useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [confirmPermanentDeleteId, setConfirmPermanentDeleteId] = useState(null);
 
-  // Force Render
   const [, setNow] = useState(new Date());
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(new Date());
     }, 60000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -84,7 +79,6 @@ function TaskList() {
     });
   };
 
-  // Different Tab Messages If Empty Sila
   const getEmptyStateMessage = () => {
     if (filter === "completed") {
       return "No completed tasks yet 🎯 Complete a task and it will appear here.";
@@ -113,6 +107,7 @@ function TaskList() {
         style={styles.search}
       />
 
+      {/* UPDATED MODERN TAB DESIGN */}
       <div style={styles.tabWrapper}>
         <div style={styles.tabContainer}>
           {["all", "completed", "pending", "overdue", "recentlyDeleted"].map(
@@ -154,7 +149,6 @@ function TaskList() {
         </select>
       </div>
 
-      {/* If Empty Sila */}
       {filteredTasks.length === 0 && (
         <div style={styles.emptyState}>
           {getEmptyStateMessage()}
@@ -419,7 +413,6 @@ const styles = {
     color: "#f1f5f9",
   },
 
-  // Empty State Style Design UI
   emptyState: {
     marginTop: "40px",
     padding: "20px",
@@ -431,6 +424,7 @@ const styles = {
   },
 
   title: { marginBottom: "15px" },
+
   search: {
     padding: "8px",
     width: "100%",
@@ -440,36 +434,51 @@ const styles = {
     backgroundColor: "#1e293b",
     color: "#f1f5f9",
   },
+
   tabWrapper: {
-    borderBottom: "1px solid #334155",
-    marginBottom: "15px",
+    marginBottom: "20px",
   },
+
   tabContainer: {
     display: "flex",
-    gap: "20px",
+    gap: "8px",
+    padding: "6px",
+    backgroundColor: "#1e293b",
+    borderRadius: "14px",
+    border: "1px solid #334155",
+    flexWrap: "wrap",
   },
+
   tabBtn: {
-    padding: "10px 0",
-    background: "none",
+    padding: "8px 16px",
+    borderRadius: "10px",
     border: "none",
+    background: "transparent",
     color: "#94a3b8",
     cursor: "pointer",
-    borderBottom: "2px solid transparent",
+    fontSize: "14px",
+    fontWeight: "500",
+    transition: "all 0.2s ease-in-out",
   },
+
   activeTab: {
-    color: "#6366f1",
-    borderBottom: "2px solid #6366f1",
+    background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+    color: "#ffffff",
+    boxShadow: "0 4px 14px rgba(99,102,241,0.4)",
   },
+
   secondaryFilter: {
     marginBottom: "30px",
     display: "flex",
     alignItems: "center",
     gap: "8px",
   },
+
   dropdownLabel: {
     fontSize: "13px",
     color: "#94a3b8",
   },
+
   dropdown: {
     padding: "8px",
     borderRadius: "6px",
@@ -478,6 +487,7 @@ const styles = {
     color: "#f1f5f9",
     width: "220px",
   },
+
   taskItem: {
     display: "flex",
     alignItems: "flex-start",
@@ -487,12 +497,15 @@ const styles = {
     backgroundColor: "#1e293b",
     borderRadius: "12px",
   },
+
   overdueTask: {
     border: "1px solid #ef4444",
   },
+
   completedTask: {
     border: "1px solid #22c55e",
   },
+
   taskTitle: {
     fontSize: "18px",
     fontWeight: "600",
@@ -501,12 +514,14 @@ const styles = {
     alignItems: "center",
     gap: "10px",
   },
+
   categoryLabel: {
     padding: "4px 10px",
     borderRadius: "20px",
     fontSize: "12px",
     color: "#fff",
   },
+
   completedBadge: {
     padding: "4px 10px",
     borderRadius: "20px",
@@ -514,6 +529,7 @@ const styles = {
     backgroundColor: "#22c55e",
     color: "#fff",
   },
+
   overdueBadge: {
     padding: "4px 10px",
     borderRadius: "20px",
@@ -521,26 +537,31 @@ const styles = {
     backgroundColor: "#ef4444",
     color: "#fff",
   },
+
   metaText: {
     fontSize: "14px",
     color: "#94a3b8",
     marginBottom: "4px",
   },
+
   sectionLabel: {
     marginTop: "10px",
     fontWeight: "600",
     fontSize: "14px",
   },
+
   description: {
     fontSize: "14px",
     marginTop: "4px",
     color: "#cbd5e1",
   },
+
   subtaskList: {
     paddingLeft: "20px",
     marginTop: "4px",
     fontSize: "14px",
   },
+
   smallBtn: {
     padding: "6px 10px",
     borderRadius: "6px",
