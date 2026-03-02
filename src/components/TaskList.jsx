@@ -19,9 +19,12 @@ function TaskList() {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [editTask, setEditTask] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [confirmPermanentDeleteId, setConfirmPermanentDeleteId] = useState(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState("all");
+  const [confirmDeleteId, setConfirmDeleteId] =
+    useState(null);
+  const [confirmPermanentDeleteId, setConfirmPermanentDeleteId] =
+    useState(null);
 
   const [, setNow] = useState(new Date());
   useEffect(() => {
@@ -435,6 +438,7 @@ const styles = {
     color: "#f1f5f9",
   },
 
+  /* 🔥 MODERN TAB UI */
   tabWrapper: {
     marginBottom: "20px",
   },
