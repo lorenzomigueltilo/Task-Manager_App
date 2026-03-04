@@ -19,12 +19,11 @@ function TaskList() {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [editTask, setEditTask] = useState(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState("all");
-  const [confirmDeleteId, setConfirmDeleteId] =
-    useState(null);
-  const [confirmPermanentDeleteId, setConfirmPermanentDeleteId] =
-    useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [confirmPermanentDeleteId, setConfirmPermanentDeleteId] = useState(null);
+  const [confirmToggleTask, setConfirmToggleTask] = useState(null);
+  const [confirmRestoreTask, setConfirmRestoreTask] = useState(null);
 
   const [, setNow] = useState(new Date());
   useEffect(() => {
@@ -179,7 +178,7 @@ function TaskList() {
               <input
                 type="checkbox"
                 checked={task.completed}
-                onChange={() => toggleTask(task.id)}
+                onChange={() => setConfirmToggleTask(task)}
               />
             )}
 
@@ -334,7 +333,7 @@ function TaskList() {
                       backgroundColor: "#f59e0b",
                     }}
                     onClick={() =>
-                      toggleTask(task.id)
+                      setConfirmToggleTask(task)
                     }
                   >
                     Unmark
@@ -349,7 +348,7 @@ function TaskList() {
                       backgroundColor: "#22c55e",
                     }}
                     onClick={() =>
-                      restoreTask(task.id)
+                      setConfirmRestoreTask(task)
                     }
                   >
                     Restore
@@ -401,6 +400,30 @@ function TaskList() {
           onConfirm={() => {
             permanentlyDeleteTask(confirmPermanentDeleteId);
             setConfirmPermanentDeleteId(null);
+          }}
+        />
+      )}
+      {confirmToggleTask && (
+        <ConfirmModal
+          message={
+            confirmToggleTask.completed
+              ? "Are you sure you want to unmark this completed task?"
+              : "Are you sure you want to mark this task as completed?"
+          }
+          onCancel={() => setConfirmToggleTask(null)}
+          onConfirm={() => {
+            toggleTask(confirmToggleTask.id);
+            setConfirmToggleTask(null);
+          }}
+        />
+      )}
+      {confirmRestoreTask && (
+        <ConfirmModal
+          message="Are you sure you want to restore this task?"
+          onCancel={() => setConfirmRestoreTask(null)}
+          onConfirm={() => {
+            restoreTask(confirmRestoreTask.id);
+            setConfirmRestoreTask(null);
           }}
         />
       )}

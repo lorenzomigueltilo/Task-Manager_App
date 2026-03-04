@@ -65,7 +65,11 @@ export function TaskProvider({ children }) {
   const deleteTask = (id) => {
     const taskToDelete = tasks.find((task) => task.id === id);
     if (taskToDelete) {
-      setDeletedTasks((prev) => [taskToDelete, ...prev]);
+      setDeletedTasks((prev) => {
+        const exists = prev.some((t) => t.id === taskToDelete.id);
+        if (exists) return prev;
+        return [taskToDelete, ...prev];
+      });
     }
     setTasks(tasks.filter((task) => task.id !== id));
   };
@@ -143,21 +147,79 @@ export function TaskProvider({ children }) {
     setTasks(sortTasksByDueDate(updatedTasks));
   };
 
-  // AUTO DELETE AFTER 1 DAY
+  // ✅ CLEANUP ON APP START (NO DUPLICATION)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => {
-          if (!task.completed || !task.completedAt)
-            return true;
+    const oneDay = 24 * 60 * 60 * 1000;
 
-          const oneDay = 24 * 60 * 60 * 1000;
+    setTasks((prevTasks) => {
+      const remainingTasks = [];
+      const expiredTasks = [];
+
+      prevTasks.forEach((task) => {
+        if (task.completed && task.completedAt) {
           const expired =
             Date.now() - task.completedAt >= oneDay;
 
-          return !expired;
-        })
-      );
+          if (expired) {
+            expiredTasks.push(task);
+          } else {
+            remainingTasks.push(task);
+          }
+        } else {
+          remainingTasks.push(task);
+        }
+      });
+
+      if (expiredTasks.length > 0) {
+        setDeletedTasks((prev) => {
+          const newUnique = expiredTasks.filter(
+            (task) => !prev.some((t) => t.id === task.id)
+          );
+          return [...newUnique, ...prev];
+        });
+      }
+
+      return remainingTasks;
+    });
+  }, []);
+
+  // ✅ AUTO MOVE (NO DUPLICATION)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const oneDay = 24 * 60 * 60 * 1000; // 1 day
+     // const oneDay = 30 * 1000; 30 secs
+    
+
+      setTasks((prevTasks) => {
+        const remainingTasks = [];
+        const expiredTasks = [];
+
+        prevTasks.forEach((task) => {
+          if (task.completed && task.completedAt) {
+            const expired =
+              Date.now() - task.completedAt >= oneDay;
+
+            if (expired) {
+              expiredTasks.push(task);
+            } else {
+              remainingTasks.push(task);
+            }
+          } else {
+            remainingTasks.push(task);
+          }
+        });
+
+        if (expiredTasks.length > 0) {
+          setDeletedTasks((prev) => {
+            const newUnique = expiredTasks.filter(
+              (task) => !prev.some((t) => t.id === task.id)
+            );
+            return [...newUnique, ...prev];
+          });
+        }
+
+        return remainingTasks;
+      });
     }, 60000);
 
     return () => clearInterval(interval);
