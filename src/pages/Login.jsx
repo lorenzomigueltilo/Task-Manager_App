@@ -53,7 +53,7 @@ function Login() {
         {error && <p style={styles.error}>{error}</p>}
 
         <div style={styles.testAccount}>
-        <p><strong>Reqres Test Account:</strong></p>
+        <p><strong>Task-Manager Credentials</strong></p>
         <p>Email: eve.holt@reqres.in</p>
         <p>Password: cityslicka</p>
       </div>
